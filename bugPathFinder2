@@ -14,6 +14,7 @@ function [path1, ColonyGrid] = bugPathPlanner1(ObstacleGrid,Start,Goal)
     while sum(dis) ~= 2     
         Past = Start;
         d = Goal - Start;
+        disp(d)
         angle = -d(1)/d(2);
         % Decide the direction of the next move
         if angle >= tan(0.125*pi) && angle < tan(0.375*pi) && d(1) < 0
@@ -36,7 +37,7 @@ function [path1, ColonyGrid] = bugPathPlanner1(ObstacleGrid,Start,Goal)
         
         
         if isOut(s,Start)
-            path1 = [-2 -2];
+            path1 = [path1;-2 -2];
             break
         end
         
@@ -44,6 +45,9 @@ function [path1, ColonyGrid] = bugPathPlanner1(ObstacleGrid,Start,Goal)
             % If the next move is clear, move to the next move
             path1 = [path1;Start];
             ColonyGrid(Start(1),Start(2)) = 4;
+        elseif ColonyGrid(Start(1),Start(2)) == 2
+            path1 = [path1;Start;-1 -1];
+            break;
         elseif ColonyGrid(Start(1),Start(2)) == 3
             % If the next move is the terminal, stop and return
             path1 = [path1;Goal];
@@ -52,11 +56,13 @@ function [path1, ColonyGrid] = bugPathPlanner1(ObstacleGrid,Start,Goal)
             % If the next move is obstacle, rotate the vector
             % counterclockwisely until a valid move
             try 
-                while ColonyGrid(Start(1),Start(2)) == 1
+                while ColonyGrid(Start(1),Start(2)) == 1                   
+                    disp(Start)
                     Start = rotate(Past,Start);
                 end
-                if ColonyGrid(Start(1),Start(2)) == 4
+                if ColonyGrid(Start(1),Start(2)) == 4 || ColonyGrid(Start(1),Start(2)) == 2
                     % If the next move is the last move
+                    disp(Start)
                     path1 = [path1;Start;[-1 -1]];
                     break;
                 else
