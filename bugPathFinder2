@@ -14,11 +14,11 @@ function [path1, ColonyGrid] = bugPathPlanner1(ObstacleGrid,Start,Goal)
     while sum(dis) ~= 2     
         Past = Start;
         d = Goal - Start;
-        angle = -d(1)/d(2);
+        angle = -d(1)/d(2)
         % Decide the direction of the next move
         if angle >= tan(0.125*pi) && angle < tan(0.375*pi) && d(1) < 0
             Start = [Start(1)-1 Start(2)+1];
-        elseif angle >= tan(0.375*pi) || angle < tan(0.625*pi) && d(1) < 0
+        elseif (angle >= tan(0.375*pi) || angle < tan(0.625*pi)) && d(1) < 0
             Start = [Start(1)-1 Start(2)];
         elseif angle >= tan(0.625*pi) && angle < tan(0.875*pi) && d(1) < 0
             Start = Start - 1;
@@ -45,6 +45,9 @@ function [path1, ColonyGrid] = bugPathPlanner1(ObstacleGrid,Start,Goal)
             path1 = [path1;Start];
             ColonyGrid(Start(1),Start(2)) = 4;
         elseif ColonyGrid(Start(1),Start(2)) == 2
+            path1 = [path1;Start;-1 -1];
+            break;
+        elseif ColonyGrid(Start(1),Start(2)) == 4
             path1 = [path1;Start;-1 -1];
             break;
         elseif ColonyGrid(Start(1),Start(2)) == 3
